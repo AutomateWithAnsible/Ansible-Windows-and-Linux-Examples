@@ -10,4 +10,4 @@
     - cleanup: "no"
 
   roles:
-    - Files-and-File-Transfers
+    - ../roles/Files-and-File-Transfers
