@@ -1,0 +1,9 @@
+---
+# Windows Playbook
+# ansible-playbook Windows.yml -i windows-inventory.yml -vvv
+
+- name: Windows Playbook
+  hosts: WindowsExample
+
+  roles:
+    - Windows

@@ -1,0 +1,16 @@
+---
+# Slightly advanced package installation
+- name: Advanced Package Installation
+  hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+  vars:
+    - package_basic: "no"
+    - Package_Suite_Install_Using_Vars: "no"
+    - Package_Suite_Install_Using_Items: "no"
+    - install_apache: "yes"
+    - uninstall_apache: "no"
+
+  roles:
+    - Package-Advanced

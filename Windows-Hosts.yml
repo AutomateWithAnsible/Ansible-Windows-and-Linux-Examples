@@ -1,0 +1,9 @@
+---
+WindowsExample:
+  hosts: MyWindowsIPAddress
+  vars:
+    ansible_user: MyWindowsUsername
+    ansible_ssh_pass: MyWindowsPassword
+    ansible_connection: winrm
+    ansible_winrm_server_cert_validation: ignore
+    ansible_port: 5986

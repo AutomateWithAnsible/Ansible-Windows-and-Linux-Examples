@@ -1,0 +1,10 @@
+---
+# Directory and File Manipulation
+- name: URL Downloads, Archiving, and Un-Archiving
+  hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+
+  roles:
+    - Downloads-and-Archives

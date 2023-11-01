@@ -1,0 +1,13 @@
+---
+# Directory and File Manipulation
+- name: Directory and File Manipulation
+  hosts: localhost
+  connection: local
+  become: yes
+  become_method: sudo
+  vars:
+    - files_role: "yes"
+    - cleanup: "no"
+
+  roles:
+    - Files-and-File-Transfers
