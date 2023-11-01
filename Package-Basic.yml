@@ -16,4 +16,4 @@
     - files_role: "no"
 
   roles:
-    - Package-Basic
+    - ../roles/Package-Basic
