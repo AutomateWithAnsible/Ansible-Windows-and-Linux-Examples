@@ -1,0 +1,47 @@
+---
+# tasks file for Windows
+
+- name: "Create a file on a Windows Host from a Jinja2 Template within the role that uses Ansible Variables and Loops to Create the File"
+  win_template:
+    src: "{{ item }}"
+    dest: "C:/Users/{{ ansible_user }}/{{ item }}"
+  with_items:
+    - "file.txt.j2"
+  tags: win_template
+
+- name: "Create a Directory Structure on a Windows host"
+  win_file:
+    path: "C:/Users/{{ ansible_user }}/{{ item }}"
+    state: directory
+  with_items:
+    - "ohToodles/mickeymousekatool1"
+    - "SirTestALot/test1/test2/test3"
+  tags: win_directory
+
+- name: "Download a File to Specified Path on a Windows Host but Only if the file is Modified or the Destination File Does Not Exist"
+  win_get_url:
+    url: "{{ item.url }}"
+    dest: "C:/Users/{{ ansible_user }}/{{ item.name }}"
+    force: no
+  with_items:
+    - url: "https://releases.hashicorp.com/terraform/1.4.6/terraform_1.4.6_windows_amd64.zip"
+      name: "terraform_1.4.6_windows_amd64.zip"
+  tags: win_get_url
+
+- name: "Unarchive the Downloaded Zip File"
+  win_unzip:
+    src: "C:/Users/{{ ansible_user }}/{{ item }}.zip"
+    dest: "C:/Users/{{ ansible_user }}/{{ item }}"
+    creates: "C:/Users/{{ ansible_user }}/{{ item }}"
+  with_items:
+    - "terraform_1.4.6_windows_amd64"
+  tags: win_unzip
+
+# This does not work but I am leaving it here for reference
+- name: "Add the Terraform Directory to the Windows Path"
+  win_path:
+    elements: "C:/Users/{{ ansible_user }}/{{ item }}"
+    state: present
+  with_items:
+    - "terraform_1.4.6_windows_amd64"
+  tags: win_path

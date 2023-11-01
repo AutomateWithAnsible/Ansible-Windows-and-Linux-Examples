@@ -1,0 +1,52 @@
+---
+
+- name: Download a tarball file from a url
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - dest: "/tmp/terraform-docs-v0.16.0-linux-amd64.tar.gz"
+      url: "https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-linux-amd64.tar.gz"
+  tags: download_tarball
+
+- name: Extract tarball
+  unarchive:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: "/tmp/terraform-docs-v0.16.0-linux-amd64.tar.gz"
+      dest: "/tmp/"
+  tags: extract_tarball
+
+- name: Remove Downloaded Tarball
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "/tmp/terraform-docs-v0.16.0-linux-amd64.tar.gz"
+  tags: remove_tarball
+
+- name: execute terraform-docs
+  command: "{{ item }}"
+  with_items:
+    - "/tmp/terraform-docs --help"
+  tags: execute_terraform_docs
+
+- name: Copy the terraform-docs binary to the files directory of this role
+  fetch:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - src: "/tmp/terraform-docs"
+      dest: "{{ role_path }}/files/terraform-docs"
+  tags: copy_terraform_docs
+
+- name: Create Zip file from what used to be a tarball
+  archive:
+    path: "{{ item.path }}"
+    dest: "{{ item.dest }}"
+    format: zip
+  with_items:
+    - path: "/tmp/terraform-docs"
+      dest: "{{ role_path }}/files/terraform-docs.zip"
+  tags: create_zip

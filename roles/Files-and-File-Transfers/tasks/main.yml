@@ -1,0 +1,85 @@
+---
+- name: "Create a directory at /tmp/example"
+  file:
+    path: /tmp/example
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+  tags: directory
+
+- name: "Create a file at /tmp/example/example.conf"
+  file:
+    path: /tmp/example/example.conf
+    state: touch
+    mode: 0644
+    owner: root
+    group: root
+  tags: file
+
+- stat: path=/tmp/example/example.conf
+  register: stat_result
+  tags: file
+
+- name: "Set the contents of /tmp/example/example.conf"
+  blockinfile:
+    path: /tmp/example/example.conf
+    block: |
+      This is a static block of text
+      that will be inserted into the file
+  tags: file_contents
+  when: stat_result.stat.exists == True
+
+- name: "Copy the file /tmp/example/example.conf on the VM to /tmp/example/example.conf.copy on the VM"
+  copy:
+    src: /tmp/example/example.conf
+    dest: /tmp/example/example.conf.copy
+    owner: root
+    group: root
+    mode: 0644
+  tags: copy_file
+  when: stat_result.stat.exists == True
+
+- name: "Copy the file /tmp/example/example.conf on the VM to the Ansible Control Node"
+  fetch:
+    src: /tmp/example/example.conf
+    dest: "{{role_path}}/files/from-vm-to-ansible-example.conf"
+    flat: yes
+  tags: fetch_file
+  when: stat_result.stat.exists == True
+
+- name: "Copy the file Role-to-VM.txt on the control node to /tmp/example/Role-to-VM.txt on the VM"
+  copy:
+    src: "{{role_path}}/files/Role-to-VM.txt"
+    dest: /tmp/example/Role-to-VM.txt
+    owner: root
+    group: root
+    mode: 0644
+  tags: copy_file
+
+- name: "Remove Files Created on the VM"
+  file:
+    path: "/tmp/example/{{item}}"
+    state: absent
+  with_items:
+    - example.conf
+    - example.conf.copy
+    - Role-to-VM.txt
+  tags: remove_file
+  when: cleanup is defined and cleanup == "yes"
+
+- name: "Remove Files Created in Role on Ansible Control Node"
+  file:
+    path: "{{item}}"
+    state: absent
+  with_items:
+    - "{{role_path}}/files/from-vm-to-ansible-example.conf"
+  tags: remove_file
+  when: cleanup is defined and cleanup == "yes"
+
+- name: "Remove Directory Created in Role and on VM"
+  file:
+    path: /tmp/example
+    state: absent
+  tags: remove_directory
+  when: cleanup is defined and cleanup == "yes"

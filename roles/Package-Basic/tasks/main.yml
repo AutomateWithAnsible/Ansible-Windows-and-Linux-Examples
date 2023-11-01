@@ -1,0 +1,14 @@
+---
+# tasks file for basics
+
+- name: Just be basic and Install Vim
+  package:
+    name: vim
+    state: present
+  tags: basic-vim-install
+
+- name: Just be basic and Uninstall Vim
+  package:
+    name: vim
+    state: absent
+  tags: basic-vim-uninstall

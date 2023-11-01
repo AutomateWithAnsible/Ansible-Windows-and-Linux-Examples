@@ -1,0 +1,11 @@
+---
+# vars file for basics
+Package_Suite:
+  - vim
+  - git
+  - wget
+  - unzip
+
+
+
+

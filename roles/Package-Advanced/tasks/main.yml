@@ -1,0 +1,75 @@
+---
+# tasks file for advanced
+
+- name: "Only Install Vim if I tell you to"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vim
+  when: install_vim is defined and install_vim == "yes"
+  tags: on-demand-vim-install
+
+- name: "Only Uninstall Vim if I tell you to"
+  package:
+    name: vim
+    state: absent
+  with_items:
+    - vim
+  when: uninstall_vim is defined and uninstall_vim == "yes"
+  tags: on-demand-vim-uninstall
+
+- name: "Install the suite of packages stored in thr variable named Package_Suite"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ Package_Suite }}"
+  when: Package_Suite is defined and Package_Suite_Install_Using_Vars == "yes"
+  tags: install-package-suite
+
+- name: "Install the suite of packages stored in thr variable named Package_Suite"
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vim
+    - git
+    - wget
+    - unzip
+  when: Package_Suite_Install_Using_Items is defined and Package_Suite_Install_Using_Items == "yes"
+  tags: install-package-suite
+
+- name: "Install Apache then make sure it is up and running"
+  package:
+    name: httpd
+    state: present
+  when: install_apache is defined and install_apache == "yes"
+  tags: install-apache
+  notify: apache
+
+#- name: "Enable and Start the Apache Service"
+  #service:
+    #name: httpd
+    #state: started
+    #enabled: yes
+  #when: install_apache is defined and install_apache == "yes"
+  #tags: install-apache
+  #ignore_errors: yes
+  #failed_when: false
+
+- name: "Disable and Stop the Apache Service if the Service is found"
+  service:
+    name: httpd
+    state: stopped
+    enabled: no
+  when: uninstall_apache is defined and uninstall_apache == "yes"
+  tags: uninstall-apache
+  ignore_errors: yes
+  failed_when: false
+
+- name: "Uninstall Apache"
+  package:
+    name: httpd
+    state: absent
+  when: uninstall_apache is defined and uninstall_apache == "yes"
+  tags: uninstall-apache

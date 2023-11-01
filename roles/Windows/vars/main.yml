@@ -1,0 +1,11 @@
+---
+# vars file for Windows
+vms:
+  - name: "Example-VM-Name"
+    ip: "123.456.789.012"
+  - name: "Example-2-VM-Name"
+    ip: "123.456.789.013"
+  - name: "Example-3-VM-Name"
+    ip: "123.456.789.013"
+  - name: "Example-4-VM-Name"
+    ip: "123.456.789.014"
