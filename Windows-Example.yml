@@ -6,4 +6,4 @@
   hosts: WindowsExample
 
   roles:
-    - Windows
+    - ../roles/Windows
