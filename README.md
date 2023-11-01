@@ -39,7 +39,7 @@ How to run a Playbook
 ```ansible-playbook <playbook_name.yml>```
 
 ## Windows Hosts
-```ansible-playbook -i Windows-Hosts.yml Windows.yml```
+```ansible-playbook -i ./Inventory/Windows-Hosts.yml ./playbooks/Windows.yml```
 
 Playbooks to create
 ---------------------
